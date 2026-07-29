@@ -1,32 +1,66 @@
 // Малък frontend bootstrap за демонстрация (index.js)
-// Файловете се зареждат от frontend/index.html
+// Проектиран да работи директно когато отвориш frontend/index.html (file://)
 
-const logEl = document.getElementById('log');
-const startBtn = document.getElementById('startBtn');
-const demoBtn = document.getElementById('demoBtn');
-const gameSection = document.getElementById('game');
-const stateEl = document.getElementById('state');
+(function () {
+  // Безопасни селектори — работят дори ако скриптът се зареди преди DOM
+  function $(sel) { return document.querySelector(sel); }
+  function $all(sel) { return Array.from(document.querySelectorAll(sel)); }
 
-function appendLog(msg) {
-  const p = document.createElement('p');
-  p.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
-  logEl.appendChild(p);
-  logEl.scrollTop = logEl.scrollHeight;
-}
+  const logEl = $('#log');
+  const startBtn = $('#startBtn');
+  const demoBtn = $('#demoBtn');
+  const gameSection = $('#game');
+  const stateEl = $('#state');
+  const fileNote = $('#fileNote');
 
-startBtn.addEventListener('click', () => {
-  appendLog('Инициализация на играта...');
-  gameSection.classList.remove('hidden');
-  stateEl.textContent = 'Игрова логика: готова (демо)';
-  appendLog('Играта е стартирана — това е минимален frontend за демонстрация.');
-});
+  function appendLog(msg) {
+    if (!logEl) return;
+    const p = document.createElement('p');
+    p.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+    logEl.appendChild(p);
+    logEl.scrollTop = logEl.scrollHeight;
+  }
 
-demoBtn.addEventListener('click', () => {
-  appendLog('Правя демо ход...');
-  // Примерна промяна на състоянието
-  const rnd = Math.floor(Math.random() * 100);
-  stateEl.textContent = `Демо резултат: ${rnd}`;
-});
+  function safeInit() {
+    if (!startBtn || !demoBtn || !gameSection || !stateEl) {
+      // Ако елементите не са налични — опитай пак след кратко забавяне
+      setTimeout(safeInit, 50);
+      return;
+    }
 
-// Инициален лог
-appendLog('Frontend зареден.');
+    startBtn.addEventListener('click', () => {
+      appendLog('Инициализация на играта...');
+      gameSection.classList.remove('hidden');
+      stateEl.textContent = 'Игрова логика: готова (демо)';
+      appendLog('Играта е стартирана — това е минимален frontend за демонстрация.');
+    });
+
+    demoBtn.addEventListener('click', () => {
+      appendLog('Правя демо ход...');
+      const rnd = Math.floor(Math.random() * 100);
+      stateEl.textContent = `Демо резултат: ${rnd}`;
+    });
+
+    // Инициален лог
+    appendLog('Frontend зареден.');
+
+    // Ако файлът се отвори като file:// покажи кратко съобщение
+    try {
+      if (window && window.location && window.location.protocol === 'file:') {
+        if (fileNote) fileNote.textContent = 'Забележка: отваряш файла през file:// — всичко трябва да работи локално без web-сървър.';
+        appendLog('Заредено през file:// — работи локално.');
+      } else {
+        if (fileNote) fileNote.textContent = 'Заредено през web протокол. За локално отваряне използвай директорията frontend и отвори index.html.';
+      }
+    } catch (e) {
+      /* ignore */
+    }
+  }
+
+  // Стартираме когато DOM е ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', safeInit);
+  } else {
+    safeInit();
+  }
+})();

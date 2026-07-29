@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Mafia21 — Frontend</title>
-  <link rel="stylesheet" href="/frontend/css/style.css">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <div id="app">
@@ -24,6 +24,12 @@
         <h2>Играта е стартирана</h2>
         <div id="state"></div>
       </section>
+
+      <noscript>
+        <p style="color:#ffb4a2">JavaScript трябва да е разрешен, за да работи демото.</p>
+      </noscript>
+
+      <p id="fileNote" style="margin-top:12px;color:var(--muted);font-size:13px"></p>
     </main>
 
     <footer>
@@ -31,6 +37,7 @@
     </footer>
   </div>
 
-  <script src="/frontend/js/index.js"></script>
+  <!-- Заявка за зареждане на локален скрипт (относителен път): работи и при file:// -->
+  <script src="js/index.js"></script>
 </body>
 </html>
