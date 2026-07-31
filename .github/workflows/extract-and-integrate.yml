@@ -1,0 +1,18 @@
+name: Extract and integrate backend
+
+on:
+  push:
+    branches:
+      - auto/fix-Mafia21-20260729
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  extract-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
