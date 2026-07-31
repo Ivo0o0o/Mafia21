@@ -1,0 +1,5 @@
+Trigger file to start CI build
+
+Triggered at: 2026-07-30T14:45:00+03:00
+
+This file is updated to trigger the build-and-inline workflow (push trigger).
